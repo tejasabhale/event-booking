@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import EventCard from "../components/EventCard";
 import api from "../api/axios";
-import { useNavigate } from "react-router-dom";
 
 function Home() {
   const [events, setEvents] = useState([]);

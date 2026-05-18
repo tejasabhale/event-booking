@@ -12,10 +12,13 @@ function EventDetails() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.get(`/events/${id}`).then((res) => {
-      const data = res.data.data || res.data;
-      setEvent(data);
-    });
+    api
+      .get(`/events/${id}`)
+      .then((res) => {
+        const data = res.data.data || res.data;
+        setEvent(data);
+      })
+      .catch(() => navigate("/"));
   }, [id]);
 
   const handleBooking = async () => {

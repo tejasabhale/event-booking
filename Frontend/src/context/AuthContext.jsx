@@ -2,10 +2,16 @@ import { Children, createContext, useContext, useState } from "react";
 
 const AuthContext = createContext();
 
+const getStoredUser = () => {
+  try {
+    return JSON.parse(localStorage.getItem("user")) || null;
+  } catch {
+    return null;
+  }
+};
+
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user")) || null,
-  );
+  const [user, setUser] = useState(getStoredUser);
 
   const login = (userData, token) => {
     localStorage.setItem("user", JSON.stringify(userData));

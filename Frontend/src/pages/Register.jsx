@@ -15,11 +15,15 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.mobileNo.length !== 10) {
+      alert("Mobile number must be exactly 10 digits");
+      return;
+    }
 
     try {
       const res = await api.post("/user/register", formData);
 
-      alert(res.data.message);
+      alert(res.data?.message);
 
       navigate("/verify-otp", {
         state: {
@@ -34,12 +38,9 @@ function Register() {
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md bg-slate-900 rounded-3xl shadow-xl p-6 sm:p-8 border border-slate-800">
-
         {/* Heading */}
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-white">
-            Create Account
-          </h2>
+          <h2 className="text-3xl font-bold text-white">Create Account</h2>
           <p className="text-slate-400 mt-2 text-sm sm:text-base">
             Register for EventZone and start booking events.
           </p>
@@ -47,7 +48,6 @@ function Register() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-
           <input
             type="text"
             placeholder="Full Name"
@@ -89,11 +89,17 @@ function Register() {
           />
 
           <input
-            type="number"
+            type="tel"
             placeholder="Mobile Number"
             required
+            minLength={10}
+            maxLength={10}
+            value={formData.mobileNo}
             onChange={(e) =>
-              setFormData({ ...formData, mobileNo: e.target.value })
+              setFormData({
+                ...formData,
+                mobileNo: e.target.value.replace(/\D/g, "").slice(0, 10),
+              })
             }
             className="w-full px-4 py-3 rounded-xl bg-slate-800 text-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-indigo-500"
           />

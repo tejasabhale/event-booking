@@ -18,7 +18,11 @@ function CreateEvent() {
     e.preventDefault();
 
     try {
-      await api.post("/events", formData);
+      await api.post("/events", {
+        ...formData,
+        price: Number(formData.price),
+        totalSeats: Number(formData.totalSeats),
+      });
       alert("Event Created Successfully!");
       navigate("/my-events");
     } catch (error) {
@@ -29,7 +33,6 @@ function CreateEvent() {
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl p-8 md:p-10">
-
         {/* Heading */}
         <div className="mb-8 text-center">
           <h1 className="text-4xl font-bold text-white">Create Event</h1>
@@ -40,7 +43,6 @@ function CreateEvent() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-
           {/* Title */}
           <div>
             <label className="block text-sm text-slate-300 mb-2">
@@ -75,7 +77,6 @@ function CreateEvent() {
 
           {/* Date + Venue */}
           <div className="grid md:grid-cols-2 gap-6">
-
             <div>
               <label className="block text-sm text-slate-300 mb-2">
                 Event Date
@@ -91,9 +92,7 @@ function CreateEvent() {
             </div>
 
             <div>
-              <label className="block text-sm text-slate-300 mb-2">
-                Venue
-              </label>
+              <label className="block text-sm text-slate-300 mb-2">Venue</label>
               <input
                 type="text"
                 required
@@ -108,7 +107,6 @@ function CreateEvent() {
 
           {/* Price + Seats */}
           <div className="grid md:grid-cols-2 gap-6">
-
             <div>
               <label className="block text-sm text-slate-300 mb-2">
                 Price (₹)
