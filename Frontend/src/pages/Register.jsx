@@ -94,6 +94,7 @@ function Register() {
             required
             minLength={10}
             maxLength={10}
+            pattern="[0-9]{10}"
             value={formData.mobileNo}
             onChange={(e) =>
               setFormData({
