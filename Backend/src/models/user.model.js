@@ -35,6 +35,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      match: [/^[0-9]{10}$/, "Please enter a valid 10-digit mobile number"]
     },
     refreshToken: {
       type: String,
