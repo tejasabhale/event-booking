@@ -30,7 +30,7 @@ const createEvent = asyncHandler(async (req, res) => {
 });
 
 const getAllEvents = asyncHandler(async (req, res) => {
-  const events = await Event.find().populate("organizer", "id fullName email");
+  const events = await Event.find().populate("organizer", "_id fullName email");
 
   return res
     .status(200)
@@ -41,7 +41,7 @@ const getEventById = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const event = await Event.findById(id).populate(
     "organizer",
-    "id fullName email",
+    "_id fullName email",
   );
   if (!event) {
     throw new ApiError(404, "Event not found");
