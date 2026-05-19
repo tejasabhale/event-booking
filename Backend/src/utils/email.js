@@ -1,17 +1,17 @@
-import nodemailer from 'nodemailer'
-import { Otp } from '../models/otp.model.js'
-import dotenv from "dotenv"
-dotenv.config(); 
+import nodemailer from "nodemailer";
+import { Otp } from "../models/otp.model.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
-})
-
-
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false, 
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 const getOtpTemplate = (otp, msg) => `
 <!DOCTYPE html>
@@ -62,26 +62,38 @@ const getOtpTemplate = (otp, msg) => `
 `;
 
 export const sendOtpEmail = async (email, otp, type) => {
-    try {
-        const title = type === 'accountVerification' ? 'Verify your EventZone Account' : "Event Booking Verification"
-        const msg = type === 'accountVerification' 
-        ? 'Please use the following OTP to verify your EventZone account'
-        : 'Please use the following OTP to verify and confirm your event booking'
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: title,
-            html: getOtpTemplate(otp, msg)
-        }
-    
-        await transporter.sendMail(mailOptions)
-        console.log(`OTP email sent to ${email} for ${type}`);
-    } catch (error) {
-        console.log(`Error while sending otp email to ${email} for ${type}:`, error);
-    }
-}
+  try {
+    const title =
+      type === "accountVerification"
+        ? "Verify your EventZone Account"
+        : "Event Booking Verification";
+    const msg =
+      type === "accountVerification"
+        ? "Please use the following OTP to verify your EventZone account"
+        : "Please use the following OTP to verify and confirm your event booking";
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: title,
+      html: getOtpTemplate(otp, msg),
+    };
 
-export const sendBookingEmail = async (email, username, eventTitle, eventDate) => {
+    await transporter.sendMail(mailOptions);
+    console.log(`OTP email sent to ${email} for ${type}`);
+  } catch (error) {
+    console.log(
+      `Error while sending otp email to ${email} for ${type}:`,
+      error,
+    );
+  }
+};
+
+export const sendBookingEmail = async (
+  email,
+  username,
+  eventTitle,
+  eventDate,
+) => {
   try {
     const mailOptions = {
       from: process.env.EMAIL_USER,
@@ -112,11 +124,11 @@ export const sendBookingEmail = async (email, username, eventTitle, eventDate) =
 
                     <p>Thank you for booking with us! 🙌</p>
                 </div>
-      `
-    }
+      `,
+    };
     await transporter.sendMail(mailOptions);
     console.log("Email sent successfully to ", email);
   } catch (error) {
     console.log("Error sending email: ", error);
   }
-}
+};
